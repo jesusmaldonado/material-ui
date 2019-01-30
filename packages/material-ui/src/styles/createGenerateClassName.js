@@ -28,7 +28,9 @@ export default function createGenerateClassName(options = {}) {
         'The ruleCounter is not supposed to grow that much.',
       ].join(''),
     );
-
+    if (process.env.NODE_ENV === 'test') {
+        return `${safePrefix(styleSheet.options.name)}-${rule.key}`;
+    }
     if (dangerouslyUseGlobalCSS && styleSheet && styleSheet.options.name) {
       return `${safePrefix(styleSheet.options.name)}-${rule.key}`;
     }
@@ -36,6 +38,7 @@ export default function createGenerateClassName(options = {}) {
     if (process.env.NODE_ENV === 'production') {
       return `${productionPrefix}${seed}${ruleCounter}`;
     }
+
 
     // Help with debuggability.
     if (styleSheet && styleSheet.options.classNamePrefix) {
